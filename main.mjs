@@ -70,7 +70,18 @@ client.startListeningForUpdates(async (updateEvent) => {
     if (updateEvent.type === "deviceStateChanged" && currentId in LIGHTS) {
         const light = LIGHTS[currentId];
 
-        if (updateIsReachable && isOn && (!light.isReachable || !light.isOn)) {
+        const shouldSetDefault = (updateIsReachable && isOn && (!light.isReachable || !light.isOn))
+
+        if (updateIsReachable !== light.isReachable) {
+            logWithTimestamp(`Light ${currentId} is reachable: ${light.isReachable} -> ${updateIsReachable}`)
+            light.isReachable = updateIsReachable;
+        }
+        if (isOn !== light.isOn){
+            logWithTimestamp(`Light ${currentId} is on: ${light.isOn} -> ${isOn}`)
+            light.isOn = isOn;
+        }
+
+        if(shouldSetDefault){
             const now = new Date();
             const isNightTime = now.getHours() >= 21;
             const defaults = isNightTime ? NIGHT_DEFAULTS : DAY_DEFAULTS;
@@ -80,15 +91,6 @@ client.startListeningForUpdates(async (updateEvent) => {
             await sleep(100);
             await client.lights.setLightTemperature({ id: currentId, colorTemperature: defaults.colorTemperature });
             await sleep(100);
-        }
-
-        if (updateIsReachable !== light.isReachable) {
-            logWithTimestamp(`Light ${currentId} is reachable: ${light.isReachable} -> ${updateIsReachable}`)
-            light.isReachable = updateIsReachable;
-        }
-        if (isOn !== light.isOn){
-            logWithTimestamp(`Light ${currentId} is on: ${light.isOn} -> ${isOn}`)
-            light.isOn = isOn;
         }
     }
 });
