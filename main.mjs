@@ -2,6 +2,7 @@ import { createDirigeraClient } from 'dirigera';
 import 'dotenv/config';
 
 const accessToken = process.env.DIRIGERA_ACCESS_TOKEN;
+const gatewayIP = process.env.DIRIGERA_IP
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -12,7 +13,7 @@ function logWithTimestamp(message) {
     console.log(`[${timestamp}] ${message}`);
 }
 
-const client = await createDirigeraClient({ accessToken });
+const client = await createDirigeraClient({ gatewayIP, accessToken });
 
 const DAY_DEFAULTS = { colorTemperature: 3610, lightLevel: 100 };
 const NIGHT_DEFAULTS = { colorTemperature: 2710, lightLevel: 80 };

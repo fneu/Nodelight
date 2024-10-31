@@ -10,4 +10,5 @@ This script controls the lights by:
 
 1. Obtain dirigera token by running `npx dirigera authenticate` ([github.com/lpgera/dirigera](https://github.com/lpgera/dirigera))
 1. Set this as environment variable: `DIRIGERA_ACCESS_TOKEN`
+1. Set `DIRIGERA_IP` to the IP address of the dirigera hub
 1. Run `npm install` and `node main.mjs`
